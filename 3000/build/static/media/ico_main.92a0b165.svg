@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
+  <g id="Group_118" data-name="Group 118" transform="translate(-18 -55)">
+    <g id="Rectangle_7" data-name="Rectangle 7" transform="translate(18 55)" fill="#fff" stroke="#ed2939" stroke-width="1">
+      <rect width="30" height="30" rx="8" stroke="none"/>
+      <rect x="0.5" y="0.5" width="29" height="29" rx="7.5" fill="none"/>
+    </g>
+    <text id="M" transform="translate(24 77)" fill="#ed2939" font-size="20" font-family="AppleSDGothicNeo-Heavy, Apple SD Gothic Neo" font-weight="800"><tspan x="0" y="0">M</tspan></text>
+  </g>
+</svg>

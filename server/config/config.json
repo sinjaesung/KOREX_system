@@ -1,0 +1,36 @@
+{
+    "rdb":{
+        "client":"mysql",
+        "host":"korex-dev-db.cewuqg5n85w2.ap-northeast-2.rds.amazonaws.com",
+        "port":"3306",
+        "user":"pref_user",
+        "password":"vmfpvm$3909",
+        "database":"korex_pref",
+        "charset":"utf8"
+    },
+    "redis":{
+        "host":"127.0.0.1",
+        "port":"6379"
+    },
+    "session":{
+        "key":"passport_session",
+        "secret":"s3cret!"
+    },
+    "oauth":{
+        "facebook":{
+            "id":"ID",
+            "secret":"SECRET",
+            "callbackurl":"/login/oauth/facebook/callback"
+        },
+        "kakao":{
+            "restapikey":"REST_API_KEY",
+            "callbackurl":"/login/oauth/kakao/callback"
+        },
+        "naver":{
+            "clientid":"CLIENT_ID",
+            "clientsecret":"CLIENT_SECRET",
+            
+            "callbackurl":"/login/oauth/naver/callback"
+        }
+    }
+}

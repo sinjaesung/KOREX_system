@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+    body{background-color:rgba(20,80,200,1);color:white;}
+    </style>
+</head>
+<body>
+    <p>이메일 테스트페이지</p>
+
+    <form action='http://172.28.5.36:8004/mail' method='post' id='mail_form'>
+        <input type='text' name='mail' value='' placeholder='메일작성'/>
+        <button>전송</button>
+    </form>
+
+    <script>
+
+    //ajax 연결 개체 생성intializedd
+    function createRequest(){
+        var request;
+
+        try{
+            request=new XMLHttpRequest();
+        }catch(exception){
+            var versions=[
+                'Msxml2.XMLHTTP.6.0',
+                'Msxml2.XMLHTTP.5.0',
+                'Msxml2.XMLHTTP.4.0',
+                'Msxml2.XMLHTTP.3.0',
+                'Msxml2.XMLHTTP',
+                'Microsoft.XMLHttp'
+            ];
+            for(var i=0; i<versions.length; i++){
+                try{
+                    return new ActiveXObject(versions[i]);
+                }catch(e){
+
+                }
+            }
+        }
+        return request;
+    }
+
+    document.querySelector('form#mail_form').onsubmit=function(event){
+        var mail=document.querySelector('form#mail_form input[name=mail]').value;
+
+        console.log('mnail send post form요청:',mail);
+
+        var request=createRequest();
+        request.onreadystatechange=function(event){
+            if(request.readyState==4){
+                if(request.status==200){
+
+                }else{
+                    console.log('응답이 이상한 상태임:',request.responseText);
+                }
+            }
+        }
+        request.open('POST','http://172.28.5.36:8004/mail',false);
+        request.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+        request.send('mail='+mail);
+
+        event.preventDefault();
+    };
+    </script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width,initial-scale=1.0'>
+    <title>docuemnt</title>
+</head>
+<body>
+    <%if(feedback){%>
+    <%=feedback%>
+    <%}%>
+    <form action='/login' method='post'>
+        <input type='text' name='email' placeholder='email입력하세요.'>
+        <input type='password' name='password' placeholder='비밀번호를 입려하세요.'>
+        <input type='submit'>
+    </form>
+</body>
+</html>

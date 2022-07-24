@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <form id='insert_form'>
+            <fieldset>
+                <legend>데이터 추가,수정</legend>
+                <table>
+                    <tr>
+                        <td><label>상품명</label></td>
+                        <td><input type='text' name='name'/></td>
+                    </tr>
+                    <tr>
+                        <td><label>모델번호</label></td>
+                        <td><input type='text' name='modelnumber'/></td>
+                    </tr>
+                    <tr>
+                        <td><label>시리즈</label></td>
+                        <td><input type='text' name='series'/></td>
+                    </tr>
+                </table>
+                <input type='submit' value='추가'/>
+
+            </fieldset>
+        </form>
+        <button id='get'>전체 데이터 로드.</button>
+        <h1>Product</h1>
+        <table id='output' border=1>
+        </table>
+    </div>
+<script>
+//ajax 연결 개체 생성intializedd
+function createRequest(){
+    var request;
+
+    try{
+        request=new XMLHttpRequest();
+    }catch(exception){
+        var versions=[
+            'Msxml2.XMLHTTP.6.0',
+            'Msxml2.XMLHTTP.5.0',
+            'Msxml2.XMLHTTP.4.0',
+            'Msxml2.XMLHTTP.3.0',
+            'Msxml2.XMLHTTP',
+            'Microsoft.XMLHttp'
+        ];
+        for(var i=0; i<versions.length; i++){
+            try{
+                return new ActiveXObject(versions[i]);
+            }catch(e){
+
+            }
+        }
+    }
+    return request;
+}
+
+//1.요소 체크 관련 핸들러
+function radio_value_change(event){
+    console.log('라디오 버튼 요소 변경 이벤트 클라발생:',event,event.target);
+}
+//2.요소 수정관련 핸들러
+function product_edit_change(event){
+    event.preventDefault();
+    var target_id=event.target.getAttribute('target_id');
+    console.log('요소 tr수정 버튼 밠갱시에 처리:',event,event.target,target_id);
+
+    var select_edit_trelement='#productlist_tr_item'+target_id;
+    var edit_name=document.querySelector(select_edit_trelement+' td.product_name_column input[name=edit_name]').value;
+    var edit_modelnumber=document.querySelector(select_edit_trelement+' td.product_modelnumber_column input[name=edit_modelnumber]').value;
+    var edit_series=document.querySelector(select_edit_trelement+' td.product_series_column input[name=edit_series]').value;
+
+    var request=createRequest();
+    request.onreadystatechange=function(event){
+        if(request.readyState==4){
+            if(request.status==200){
+
+                console.log('성공적인 modify 요청완료시에만 처리.',request.responseText);
+
+                selectData();
+            }else{
+                console.log('응답이 이상한 상태임:',request.responseText);
+            }
+        }
+    }
+    request.open('PUT','localhost:52273/products/'+target_id,false);
+    request.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+    request.send('name='+edit_name+'&modelnumber='+edit_modelnumber+'&series='+edit_series);
+
+}
+//3.요소 삭제관련 핸들러
+function product_delete_change(event){
+    event.preventDefault();
+    var target_id=event.target.getAttribute('target_id');
+    console.log('요소 tr삭제 버튼 밠갱시에 처리:',event,event.target,target_id);
+
+    var request=createRequest();
+    request.onreadystatechange=function(event){
+        if(request.readyState==4){
+            if(request.status==200){
+
+                console.log('성공적인 delete 요청완료시에만 처리.',request.responseText);
+
+                selectData();
+            }else{
+                console.log('응답이 이상한 상태임:',request.responseText);
+            }
+        }
+    }
+    request.open('DELETE','/products/'+target_id,false);
+    request.send();
+}
+//4.요소 전체 조회관련 핸들
+function selectData(){
+    //ajax요청을 하는것이고, 전체 현재의 서버의 상품들 리스트를 가져오고,그것들을 json형태 가져와서 무식한tr row조합으로뭉쳐서 가져온다.테이블로 가져온다.
+    var request=createRequest();
+    request.open('GET','/products?dummy='+new Date().getTime(),false);//매번 다른 쿼리스티링 정보로 브라우저가 캐싱하여 기존정보 보여주지 않게끔.
+    request.send();
+
+    //document.getElementById('output').value=request.responseText;
+    var json_result=JSON.parse(request.responseText);
+    var output='';
+    for(let i=0; i<json_result.length; i++){
+        var json_item=json_result[i];
+        output += '<tr class="productlist_tr_item" id="productlist_tr_item'+json_item.id+'">';
+        output +='  <td class="product_check_column"><input type="radio" name="productlist" id="radio'+json_item.id+'" value="'+json_item.id+'"/><label for="radio'+json_item.id+'">'+json_item.id+'</label></td>';
+        output +='  <td class="product_name_column"><input type="text" name="edit_name" value="'+json_item.name+'"/></td>';
+        output +='  <td class="product_modelnumber_column"><input type="text" name="edit_modelnumber" value="'+json_item.modelnumber+'"/></td>';
+        output +='  <td class="product_series_column"><input type="text" name="edit_series" value="'+json_item.series+'"/></td>';
+        output +='  <td><a href="#" class="modifybtn" target_id="'+json_item.id+'">수정</a><br/><a href="#"class="deletebtn" target_id="'+json_item.id+'">삭제</a></td>';
+        output +='</tr>';
+    }
+    console.log(request.responseText,output);
+    document.querySelector('#output').innerHTML=output;
+
+    //수정버튼 핸들러 등록.
+    var productlist_modifybtns=document.querySelectorAll('.modifybtn');
+    for(var t=0; t<productlist_modifybtns.length; t++){
+        let productlist_modifybtn=productlist_modifybtns[t];
+
+        productlist_modifybtn.onclick=product_edit_change;
+    }
+    //삭제버튼 핸들러 등록.
+    var productlist_deletebtns=document.querySelectorAll('.deletebtn');
+    for(var t=0; t<productlist_deletebtns.length; t++){
+        let productlist_deletebtn=productlist_deletebtns[t];
+
+        productlist_deletebtn.onclick=product_delete_change;
+    }
+}
+
+
+//이벤트 핸들러등록.
+//수정버튼 핸들러 등록.
+var productlist_modifybtns=document.querySelectorAll('.modifybtn');
+for(var t=0; t<productlist_modifybtns.length; t++){
+    let productlist_modifybtn=productlist_modifybtns[t];
+
+    productlist_modifybtn.onclick=product_edit_change;
+}
+//삭제버튼 핸들러 등록.
+var productlist_deletebtns=document.querySelectorAll('.deletebtn');
+for(var t=0; t<productlist_deletebtns.length; t++){
+    let productlist_deletebtn=productlist_deletebtns[t];
+
+    productlist_deletebtn.onclick=product_delete_change;
+}
+
+//get조회시에. 전체상품 리스트 조회
+document.getElementById('get').onclick=function(){
+    selectData();
+
+    //매 가져오는 순간마다 ?? 이벤트 핸들러등록.
+    var productlist_element=document.querySelectorAll('input[name=productlist]');
+    for(var t=0; t<productlist_element.length; t++){
+        let productlist_item=productlist_element[t];
+
+        productlist_item.onchange=radio_value_change;
+    }
+};
+//insert_submit form시에. 제출post시에..데이터insert 핸들러등록
+document.querySelector('#insert_form').onsubmit=function(event){
+
+    var name=document.querySelector('form#insert_form td input[name=name]').value;
+    var modelnumber=document.querySelector('form#insert_form td input[name=modelnumber]').value;
+    var series=document.querySelector('form#insert_form td input[name=series]').value;
+    var request=createRequest();
+    request.onreadystatechange=function(event){
+        if(request.readyState==4){
+            if(request.status==200){
+                var json=eval('('+request.responseText+')');
+
+                console.log('성공적인 insert요청완료시에만 처리.',request.responseText);
+
+                selectData();
+            }else{
+                console.log('응답이 이상한 상태임:',request.responseText);
+            }
+        }
+    }
+    request.open('POST','/products',false);
+    request.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+    request.send('name='+name+'&modelnumber='+modelnumber+'&series='+series);
+
+    event.preventDefault();
+};
+
+</script>
+</body>
+</html>

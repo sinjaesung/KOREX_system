@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>join form ejs</title>
+</head>
+<body>
+    <h1>inpout join form <%=title%></h1>
+    <form action='/join' method='post'>
+        id:<input type='text' name='user_id'><br/>
+        password:<input type='password' name='pw'><br/>
+        <input type='submit'>
+    </form>
+    <div clss='errMsg'><%= message %></div>
+</body>
+</html>

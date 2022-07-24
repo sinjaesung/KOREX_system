@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>join form ejs</title>
+</head>
+<body>
+    <h1>index page <%=title%></h1>
+
+    <form action='/' method='POST'>
+        <input type='text' id='favorite' name='favorite' placeholder='좋아하는 맛'/>
+        <input type='submit'/>
+    </form>
+
+    <% if(favorite) { %>
+    
+    <%= favorite %>
+
+    <%
+    } else { %>
+    
+    not cookies..s
+
+    <%
+    } %>
+</body>
+</html>

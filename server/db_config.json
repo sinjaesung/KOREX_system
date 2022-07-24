@@ -1,0 +1,8 @@
+{
+  "host": "localhost",
+  "user": "sinja",
+  "password": "sinja",
+  "database": "passport_test",
+  "port":"3307", 
+  "connectionLimit": 30
+}

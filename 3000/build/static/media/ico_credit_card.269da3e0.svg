@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="41" height="30.965" viewBox="0 0 41 30.965">
+    <defs>
+        <style>
+            .cls-1{fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px}
+        </style>
+    </defs>
+    <g id="Vector_Smart_Object" transform="translate(1 1)">
+        <g id="Vector_Smart_Object-2">
+            <g id="그룹_377">
+                <path id="패스_151" d="M39.5 23.521v7.167a4.409 4.409 0 0 1-4.333 4.482H4.833A4.409 4.409 0 0 1 .5 30.689v-20a4.409 4.409 0 0 1 4.333-4.484h30.334a4.409 4.409 0 0 1 4.333 4.482v6.3" class="cls-1" transform="translate(-.5 -6.205)"/>
+                <path id="선_465" d="M0 0L39 0" class="cls-1" transform="translate(0 10.785)"/>
+                <path id="선_466" d="M0 0L8.761 0" class="cls-1" transform="translate(7.961 20.04)"/>
+            </g>
+        </g>
+    </g>
+</svg>
